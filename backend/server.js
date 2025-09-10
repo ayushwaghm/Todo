@@ -16,6 +16,12 @@ connectDB();
 
 // Routes
 app.use('/todos', todoRoutes);
+app.get('/',(req,res)=>{
+  res.send({
+      activestatus:true,
+      error:false,
+  })
+})
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
