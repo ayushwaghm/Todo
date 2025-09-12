@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 
+const API_URL = 'https://todo-pf6z.onrender.com';
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [newTodo, setNewTodo] = useState('');
@@ -13,9 +15,8 @@ function App() {
   }, []);
 
   const fetchTodos = () => {
-    axios.get('http://localhost:3001/todos')
+    axios.get(`${API_URL}/todos`)
       .then(response => {
-        // Map MongoDB _id to id to keep your code consistent
         const data = response.data.map(todo => ({
           ...todo,
           id: todo._id,
@@ -27,7 +28,7 @@ function App() {
 
   const addTodo = () => {
     if (!newTodo.trim()) return;
-    axios.post('http://localhost:3001/todos', { title: newTodo })
+    axios.post(`${API_URL}/todos`, { title: newTodo })
       .then(() => {
         setNewTodo('');
         fetchTodos();
@@ -36,13 +37,13 @@ function App() {
   };
 
   const toggleTodo = (id) => {
-    axios.put(`http://localhost:3001/todos/${id}`)
+    axios.put(`${API_URL}/todos/${id}`)
       .then(fetchTodos)
       .catch(err => console.error('Toggle todo error:', err));
   };
 
   const deleteTodo = (id) => {
-    axios.delete(`http://localhost:3001/todos/${id}`)
+    axios.delete(`${API_URL}/todos/${id}`)
       .then(fetchTodos)
       .catch(err => console.error('Delete todo error:', err));
   };
@@ -58,8 +59,8 @@ function App() {
   };
 
   const saveEdit = (id) => {
-    if (!editTitle.trim()) return;  // Optional: prevent empty titles
-    axios.patch(`http://localhost:3001/todos/${id}`, { title: editTitle })
+    if (!editTitle.trim()) return;
+    axios.patch(`${API_URL}/todos/${id}`, { title: editTitle })
       .then(() => {
         setEditId(null);
         setEditTitle('');
@@ -71,7 +72,7 @@ function App() {
   return (
     <div className="App">
       <h1>Todo App</h1>
-      
+
       <input
         type="text"
         value={newTodo}
